@@ -1,0 +1,37 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Advertisements";
+}
+
+<div class="container">
+    <div class="row mb-3">
+        <div class="col">
+            <h2>Advertisements</h2>
+        </div>
+        <div class="col text-right">
+            <a asp-page="Create" class="btn btn-primary">Post New Ad</a>
+        </div>
+    </div>
+
+    <div class="row">
+        @foreach (var ad in Model.Advertisements)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@ad.Title</h5>
+                        <p class="card-text">@ad.Description</p>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                Posted: @ad.CreatedDate.ToShortDateString()
+                            </small>
+                        </p>
+                        <a asp-page="./Details" asp-route-id="@ad.Id"
+                           class="btn btn-info">View Details</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

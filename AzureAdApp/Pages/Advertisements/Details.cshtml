@@ -1,0 +1,69 @@
+﻿@page "{id:int}"
+@using System.Security.Claims
+@model DetailsModel
+@{
+    ViewData["Title"] = "Advertisement Details";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3 class="card-title">@Model.Advertisement.Title</h3>
+                    <p class="card-text">@Model.Advertisement.Description</p>
+                    <p class="text-muted">
+                        Posted: @Model.Advertisement.CreatedDate.ToShortDateString()
+                    </p>
+                </div>
+                @if (User.FindFirstValue(ClaimTypes.NameIdentifier) == Model.Advertisement.UserId)
+                {
+                    <form asp-page-handler="DeleteAdvertisement" method="post" style="display: inline;">
+                        <input type="hidden" name="advertisementId" value="@Model.Advertisement.Id" />
+                        <button type="submit" class="btn btn-danger"
+                                onclick="return confirm('Are you sure you want to delete this advertisement? This will also delete all associated messages.')">
+                            Delete Advertisement
+                        </button>
+                    </form>
+                }
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4>Send Message</h4>
+                    <form method="post">
+                        <input type="hidden" asp-for="MessageInput.AdvertisementId" value="@Model.Advertisement.Id" />
+                        <input type="hidden" asp-for="MessageInput.ToUserId" value="@Model.Advertisement.UserId" />
+                        <div class="form-group">
+                            <textarea asp-for="MessageInput.Content" class="form-control" rows="3" placeholder="Write your message here..."></textarea>
+                            <span asp-validation-for="MessageInput.Content" class="text-danger"></span>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="messages-section">
+                <h4>Messages</h4>
+                @if (!Model.Messages.Any())
+                {
+                    <p>No messages yet.</p>
+                }
+                else
+                {
+                    @foreach (var message in Model.Messages)
+                    {
+                        <div class="card mb-2">
+                            <div class="card-body">
+                                <p class="card-text">@message.Content</p>
+                                <small class="text-muted">
+                                    From: @message.FromUserId on @message.CreatedDate.ToShortDateString()
+                                </small>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>

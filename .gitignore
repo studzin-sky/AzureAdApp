@@ -1,0 +1,11 @@
+# Ignore Visual Sturio Temp
+.vs/ 
+*.user 
+*.suo
+
+
+
+/AzureAdApp/bin
+/AzureAdApp/obj
+/AzureAdApp/wwwroot/lib
+/AzureAdApp/appsettings.json
